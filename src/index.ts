@@ -1,10 +1,9 @@
 // tslint:disable: no-console
 import { app } from './app';
-import * as bla from './store';
 
 app.set('port', process.env.PORT || 3000);
 
-const server = app.listen(app.get('port'), () => {
+app.listen(app.get('port'), () => {
     console.log(
         ' App is running at http://localhost:%d in %s mode',
         app.get('port'),
@@ -12,5 +11,3 @@ const server = app.listen(app.get('port'), () => {
     );
     console.log(' Press CTRL-C to stop\n');
 });
-
-

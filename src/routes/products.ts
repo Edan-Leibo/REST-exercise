@@ -2,6 +2,7 @@ import { Request, Response, NextFunction, Router } from 'express';
 import { Product } from '../models';
 import uuidv1 from 'uuid/v1';
 import { productsState } from '../store';
+import { validateId, validateProductName } from '../middlewares/validations';
 
 const router = Router();
 
@@ -10,7 +11,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id',
-  validateProductId,
+  validateId,
   findProductIndex,
   (req, res) => {
     const { matchingIndex } = res.locals;
@@ -27,7 +28,7 @@ router.post('/',
   });
 
 router.put('/:id',
-  validateProductId,
+  validateId,
   validateProductName,
   findProductIndex,
   (req, res) => {
@@ -43,7 +44,7 @@ router.put('/:id',
 );
 
 router.delete('/:id',
-  validateProductId,
+  validateId,
   findProductIndex,
   (req, res) => {
     const { matchingIndex } = res.locals;
@@ -62,23 +63,6 @@ function findProductIndex(req: Request, res: Response, next: NextFunction) {
   }
 
   res.locals.matchingIndex = matchingIndex;
-  next();
-}
-
-// validate function
-function validateProductId(req: Request, res: Response, next: NextFunction) {
-  if (req.params.id.length !== 36) {
-    res.status(400).send('id does not contain 36 characters');
-    return;
-  }
-  next();
-}
-
-function validateProductName(req: Request, res: Response, next: NextFunction) {
-  if (req.params.name.length < 3) {
-    res.status(409).send('name must have at least 3 characters');
-    return;
-  }
   next();
 }
 
