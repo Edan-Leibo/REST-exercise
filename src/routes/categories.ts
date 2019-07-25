@@ -39,12 +39,9 @@ router.put('/:id',
     findCategoryIndex,
     (req, res) => {
         const { matchingIndex } = res.locals;
-
         const category: Category = req.body;
         category.id = req.params.id;
-
         categoriesState[matchingIndex] = category;
-
         res.send(category);
     },
 );

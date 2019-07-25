@@ -33,12 +33,9 @@ router.put('/:id',
   findProductIndex,
   (req, res) => {
     const { matchingIndex } = res.locals;
-
     const product: Product = req.body;
     product.id = req.params.id;
-
     productsState[matchingIndex] = product;
-
     res.send(product);
   },
 );
