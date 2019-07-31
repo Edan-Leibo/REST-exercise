@@ -4,6 +4,10 @@ import { productsState, categoriesState } from '../store';
 import uuidv1 from 'uuid/v1';
 import { validateId } from '../middlewares/validations';
 
+function loadCategories(): Promise<Category[]> {
+    return Promise.resolve(categoriesState);
+}
+
 const router = Router();
 
 router.get('/', (req, res) => {
@@ -56,17 +60,23 @@ router.delete('/:id',
     },
 );
 
-function findCategoryIndex(req: Request, res: Response, next: NextFunction) {
-    const id = req.params.id;
-    const matchingIndex = categoriesState.findIndex(o => o.id === id);
+async function findCategoryIndex(req: Request, res: Response, next: NextFunction) {
+    try {
 
-    if (matchingIndex < 0) {
-        res.sendStatus(404);
-        return;
+        const id = req.params.id;
+        const categoryArr = await loadCategories();
+        const matchingIndex = categoryArr.findIndex(o => o.id === id);
+
+        if (matchingIndex < 0) {
+            res.sendStatus(404);
+            return;
+        }
+
+        res.locals.matchingIndex = matchingIndex;
+        next();
+    } catch (err) {
+        next(err);
     }
-
-    res.locals.matchingIndex = matchingIndex;
-    next();
 }
 
 export { router };

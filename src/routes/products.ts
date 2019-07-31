@@ -4,6 +4,10 @@ import uuidv1 from 'uuid/v1';
 import { productsState } from '../store';
 import { validateId, validateProductName } from '../middlewares/validations';
 
+function loadProducts(): Promise<Product[]> {
+  return Promise.resolve(productsState);
+}
+
 const router = Router();
 
 router.get('/', (req, res) => {
@@ -50,17 +54,22 @@ router.delete('/:id',
   },
 );
 
-function findProductIndex(req: Request, res: Response, next: NextFunction) {
-  const id = req.params.id;
-  const matchingIndex = productsState.findIndex(o => o.id === id);
+async function findProductIndex(req: Request, res: Response, next: NextFunction) {
+  try {
+    const id = req.params.id;
+    const productArr = await loadProducts();
+    const matchingIndex = productArr.findIndex(o => o.id === id);
 
-  if (matchingIndex < 0) {
-    res.sendStatus(404);
-    return;
+    if (matchingIndex < 0) {
+      res.sendStatus(404);
+      return;
+    }
+
+    res.locals.matchingIndex = matchingIndex;
+    next();
+  } catch (err) {
+    next(err);
   }
-
-  res.locals.matchingIndex = matchingIndex;
-  next();
 }
 
 export { router };
