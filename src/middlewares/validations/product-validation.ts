@@ -1,8 +1,12 @@
-import { InputValidationError } from './../../models';
+import joi from 'joi';
+import { InputValidationError } from '../../models';
 import { Request, Response, NextFunction } from 'express';
+import { productSchema } from './validation-schemas';
 
 export function validateProductName(req: Request, res: Response, next: NextFunction) {
-    if (req.body.name.length < 3) {
+    const { error } = joi.validate(req.body, productSchema);
+    console.log(error);
+    if (error) {
         next(new InputValidationError('name must have at least 3 characters', 409));
         return;
     }

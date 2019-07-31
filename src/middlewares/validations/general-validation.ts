@@ -1,8 +1,11 @@
-import { InputValidationError } from './../../models/errors/inputValidationError';
+import { InputValidationError } from '../../models/errors/inputValidationError';
 import { Request, Response, NextFunction } from 'express';
+import { idSchema } from './validation-schemas';
+import joi from 'joi';
 
 export function validateId(req: Request, res: Response, next: NextFunction) {
-    if (req.params.id.length !== 36) {
+    const { error } = joi.validate(req.params.id, idSchema);
+    if (error) {
         next(new InputValidationError('id does not contain 36 characters', 400));
         return;
     }
