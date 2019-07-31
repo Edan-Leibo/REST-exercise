@@ -1,11 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
+import { InputValidationError } from '../models';
 
-export function logErrors(err: Error, req: Request, res: Response, next: NextFunction) {
-  // tslint:disable-next-line: no-console
-  console.log('AN ERROR WAS CAUGHT BY A CUSTOM HANDLER MIDDLEWARE');
-  // tslint:disable-next-line: no-console
-  console.error(err.stack);
-  next(err);
+export function InputValidationErrorHandler(err: Error, req: Request, res: Response, next: NextFunction) {
+  if (err instanceof InputValidationError) {
+    res.status(err.statusCode).send(err.message);
+    return;
+  } else {
+    next(err);
+  }
 }
 
 export function xhrErrorHandler(err: Error, req: Request, res: Response, next: NextFunction) {

@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { router as productsRouter } from './routes/products';
 import { router as categoriesRouter } from './routes/categories';
-import { logErrors, xhrErrorHandler, errorHandler } from './middlewares/error';
+import { InputValidationErrorHandler, xhrErrorHandler, errorHandler } from './middlewares/error';
 
 const app = express();
 
@@ -13,7 +13,7 @@ app.use(cors());
 app.use('/products', productsRouter);
 app.use('/categories', categoriesRouter);
 
-app.use(logErrors);
+app.use(InputValidationErrorHandler);
 app.use(xhrErrorHandler);
 app.use(errorHandler);
 
