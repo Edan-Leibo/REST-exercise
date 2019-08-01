@@ -4,6 +4,9 @@ import cors from 'cors';
 import { router as productsRouter } from './routes/products';
 import { router as categoriesRouter } from './routes/categories';
 import { InputValidationErrorHandler } from './middlewares/error';
+import { initConfig } from './utils/config';
+
+initConfig();
 
 const app = express();
 

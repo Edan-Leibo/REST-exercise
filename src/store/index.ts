@@ -5,8 +5,8 @@ import { createHttpClient } from '../utils/http-client';
 let productsState: Product[] = [];
 let categoriesState: Category[] = [];
 
-async function loadData() {
-    const httpClient = createHttpClient('http://localhost:3000/public');
+async function loadData(port: number) {
+    const httpClient = createHttpClient(`http://localhost:${port}/public`);
     productsState = await httpClient.get('products.json');
     categoriesState = await httpClient.get('categories.json');
 }
