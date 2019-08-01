@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction, Router } from 'express';
 import { Category } from '../models';
 import { productsState, categoriesState } from '../store';
-import uuidv1 from 'uuid/v1';
+import { uuid } from '../utils/gen';
 import { validateId } from '../middlewares/validations';
 
 function loadCategories(): Promise<Category[]> {
@@ -33,7 +33,7 @@ router.get('/:id',
 router.post('/',
     (req, res) => {
         const category: Category = req.body;
-        category.id = uuidv1();
+        category.id = uuid();
         categoriesState.push(category);
         res.status(201).send(category);
     });

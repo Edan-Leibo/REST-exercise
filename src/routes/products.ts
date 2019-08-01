@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction, Router } from 'express';
 import { Product } from '../models';
-import uuidv1 from 'uuid/v1';
+import { uuid } from '../utils/gen';
 import { productsState } from '../store';
 import { validateId, validateProductName } from '../middlewares/validations';
 
@@ -26,7 +26,7 @@ router.post('/',
   validateProductName,
   (req, res) => {
     const product: Product = req.body;
-    product.id = uuidv1();
+    product.id = uuid();
     productsState.push(product);
     res.status(201).send(product);
   });
