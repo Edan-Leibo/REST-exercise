@@ -1,6 +1,6 @@
+import { createHttpClient } from '../utils/http-client';
 import { Category } from './../models/category';
 import { Product } from './../models/product';
-import { createHttpClient } from '../utils/http-client';
 
 let productsState: Product[] = [];
 let categoriesState: Category[] = [];

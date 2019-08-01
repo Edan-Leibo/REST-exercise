@@ -1,2 +1,2 @@
-export * from './general-validation';
-export * from './product-validation';
+export * from './general.validation';
+export * from './product.validation';

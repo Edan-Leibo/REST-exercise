@@ -3,7 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import { router as productsRouter } from './routes/products';
 import { router as categoriesRouter } from './routes/categories';
-import { InputValidationErrorHandler } from './middlewares/error';
+import { InputValidationErrorHandler } from './middlewares/errors/input.error';
 import { initConfig } from './utils/config';
 
 initConfig();

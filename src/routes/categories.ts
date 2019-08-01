@@ -1,7 +1,6 @@
-
+import { Router } from 'express';
 import { validateId } from '../middlewares/validations';
 import * as categoriesController from '../controllers/categories.controller';
-import { Router } from 'express';
 import { wrapAsyncAndSend } from '../utils/wrappers';
 
 const router = Router();

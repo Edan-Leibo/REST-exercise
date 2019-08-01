@@ -1,6 +1,6 @@
-import { validateId, validateProductName } from '../middlewares/validations';
-import * as productsController from '../controllers/products.controller';
 import { Router } from 'express';
+import { validateId, validateProduct } from '../middlewares/validations';
+import * as productsController from '../controllers/products.controller';
 import { wrapAsyncAndSend } from '../utils/wrappers';
 
 const router = Router();
@@ -13,13 +13,13 @@ router.get('/:id',
 );
 
 router.post('/',
-  validateProductName,
+  validateProduct,
   productsController.add,
 );
 
 router.put('/:id',
   validateId,
-  validateProductName,
+  validateProduct,
   wrapAsyncAndSend(productsController.update),
 );
 
