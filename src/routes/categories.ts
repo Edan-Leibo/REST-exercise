@@ -1,82 +1,35 @@
-import { Request, Response, NextFunction, Router } from 'express';
-import { Category } from '../models';
-import { productsState, categoriesState } from '../store';
-import { uuid } from '../utils/gen';
-import { validateId } from '../middlewares/validations';
 
-function loadCategories(): Promise<Category[]> {
-    return Promise.resolve(categoriesState);
-}
+import { validateId } from '../middlewares/validations';
+import * as categoriesController from '../controllers/categories.controller';
+import { Router } from 'express';
+import { wrapAsyncAndSend } from '../utils/wrappers';
 
 const router = Router();
 
-router.get('/', (req, res) => {
-    res.send(categoriesState);
-});
+router.get('/', categoriesController.getAll);
 
 router.get('/:id/products',
     validateId,
-    findCategoryIndex,
-    (req, res) => {
-        const ans = productsState.filter(o => o.categoryId === req.params.id);
-        res.send(ans);
-    });
+    wrapAsyncAndSend(categoriesController.getAllProductsByCategoryId),
+);
 
 router.get('/:id',
     validateId,
-    findCategoryIndex,
-    (req, res) => {
-        const { matchingIndex } = res.locals;
-        res.send(categoriesState[matchingIndex]);
-    });
+    wrapAsyncAndSend(categoriesController.getById),
+);
 
 router.post('/',
-    (req, res) => {
-        const category: Category = req.body;
-        category.id = uuid();
-        categoriesState.push(category);
-        res.status(201).send(category);
-    });
+    categoriesController.add,
+);
 
 router.put('/:id',
     validateId,
-    findCategoryIndex,
-    (req, res) => {
-        const { matchingIndex } = res.locals;
-        const category: Category = req.body;
-        category.id = req.params.id;
-        categoriesState[matchingIndex] = category;
-        res.send(category);
-    },
+    wrapAsyncAndSend(categoriesController.update),
 );
 
 router.delete('/:id',
     validateId,
-    findCategoryIndex,
-    (req, res) => {
-        const { matchingIndex } = res.locals;
-        categoriesState.splice(matchingIndex, 1);
-        res.sendStatus(204);
-    },
+    categoriesController.remove,
 );
-
-async function findCategoryIndex(req: Request, res: Response, next: NextFunction) {
-    try {
-
-        const id = req.params.id;
-        const categoryArr = await loadCategories();
-        const matchingIndex = categoryArr.findIndex(o => o.id === id);
-
-        if (matchingIndex < 0) {
-            res.sendStatus(404);
-            return;
-        }
-
-        res.locals.matchingIndex = matchingIndex;
-        next();
-    } catch (err) {
-        next(err);
-    }
-}
 
 export { router };

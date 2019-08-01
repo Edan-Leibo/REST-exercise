@@ -6,6 +6,10 @@ function getAll(): Product[] {
     return productsState;
 }
 
+function getAllByCategoryId(categoryId: string): Product[] {
+    return productsState.filter(p => p.categoryId === categoryId);
+}
+
 async function getById(id: string): Promise<Product | undefined> {
     return Promise.resolve(productsState.find(p => p.id === id));
 }
@@ -34,6 +38,7 @@ function remove(id: string): Product | undefined {
 
 export default {
     getAll,
+    getAllByCategoryId,
     getById,
     add,
     update,
