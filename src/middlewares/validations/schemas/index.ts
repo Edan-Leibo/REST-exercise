@@ -1,2 +1,2 @@
-export * from './id.schema';
-export * from './product.schema';
+export * from './idSchema';
+export * from './productSchema';
