@@ -24,7 +24,6 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 # Assets
-public/
 dist/
 # Coverage reports
 coverage
